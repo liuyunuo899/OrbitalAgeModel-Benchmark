@@ -1,0 +1,21 @@
+{
+  "n_original_realizations": 30,
+  "n_derived_evaluations": 240,
+  "aggregation_factors": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "strategies": [
+    "fixed_stride",
+    "prominence_reselect"
+  ],
+  "reselection_rule": "Select largest negative-IMF trough prominence within consecutive non-overlapping blocks of K original interior troughs; preserve endpoints; no true age used.",
+  "anchor_age_rule": "original trough index times 0.405 Myr; preserved even if representative index moves",
+  "caution": "Postprocessing reselection is not independent EMD rerun or detection of missing orbital cycles; corrected age-origin RMSE is oracle-only.",
+  "source_files": {
+    "expB2_mc.npz": "2b075aef4ad3ae006fe68b9dd53ff95f65f993774259705d7997e73b3e503390",
+    "expB2_mc.csv": "57deb293d81d8b7ff61e22f8a6022e751d8277c902ee9705e8d823dec7769b79"
+  }
+}

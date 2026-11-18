@@ -1,0 +1,8 @@
+# Declared imports in the supplied Python scripts; not a fully locked environment.
+# `from PyEMD import EMD` is provided by EMD-signal (not the unrelated `pyemd`).
+numpy
+pandas
+scipy
+matplotlib
+EMD-signal
+openpyxl

@@ -1,0 +1,25 @@
+{
+  "source_script": "exp_d_realdata.py",
+  "original_supplement_script": "exp_d_realdata_combined.py",
+  "sk_step_depth_m": 1021.5625,
+  "sk_pub_step_myr": 3.8230000000000075,
+  "site_top_window_m": 10.0,
+  "sk_segment_scan_settings": {
+    "original_40_160": [
+      40.0,
+      160.0,
+      0.5
+    ],
+    "expanded_40_240": [
+      40.0,
+      240.0,
+      0.5
+    ]
+  },
+  "sk_segment_detrend_sigma_m": 40,
+  "site_segment_strategy": "evaluate_original_full_section_models_only",
+  "sk_segment_age_origin": "published_age_at_first_sample_of_each_segment__reference_assisted",
+  "gate_threshold": 0.5,
+  "source_inputs": "four original downloaded TXT files",
+  "warning": "No automatic hiatus detection; reference-assisted segment origins; below-gate forced anchoring diagnostic only"
+}

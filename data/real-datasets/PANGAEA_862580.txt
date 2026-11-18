@@ -1,0 +1,129 @@
+/* DATA DESCRIPTION:
+Citation:	Liebrand, Diederik; Beddow, Helen M; Lourens, Lucas Joost; Pälike, Heiko; Raffi, Isabella; Bohaty, Steven M; Hilgen, Frederik J; Saes, Mischa JM; Wilson, Paul A; van Dijk, Arnold E; Hodell, David A; Kroon, Dick; Huck, Claire E; Batenburg, Sietske J (2016): (Table S12) Tuning tie points for ODP Site 208-1264 [dataset]. PANGAEA, https://doi.org/10.1594/PANGAEA.862580, 
+	In supplement to: Liebrand, D et al. (2016): Cyclostratigraphy and eccentricity tuning of the early Oligocene through early Miocene (30.1–17.1 Ma): Cibicides mundulus stable oxygen and carbon isotope records from Walvis Ridge Site 1264. Earth and Planetary Science Letters, 450, 392-405, https://doi.org/10.1016/j.epsl.2016.06.007
+Project(s):	Ocean Drilling Program (ODP) (URI: https://www-odp.tamu.edu:443/)
+Coverage:	LATITUDE: -28.532483 * LONGITUDE: 2.845483
+	DATE/TIME START: 2003-04-05T00:00:00 * DATE/TIME END: 2003-04-08T00:00:00
+	MINIMUM ELEVATION: -2505.1 m * MAXIMUM ELEVATION: -2505.1 m
+Event(s):	208-1264 * LATITUDE: -28.532483 * LONGITUDE: 2.845483 * DATE/TIME START: 2003-04-05T00:00:00 * DATE/TIME END: 2003-04-08T00:00:00 * ELEVATION: -2505.1 m * PENETRATION: 566.5 m * RECOVERY: 563.8 m * LOCATION: Walvis Ridge, Southeast Atlantic Ocean * CAMPAIGN: Leg208 * BASIS: Joides Resolution (URI: https://www-odp.tamu.edu:443/resolutn.html) * METHOD/DEVICE: Composite Core (COMPCORE) * COMMENT: 61 cores; 566.5 m cored; 0 m drilled; 99.5 % recovery
+Parameter(s):	Depth, composite revised [rmcd] (Depth comp r) * PI: Liebrand, Diederik (https://orcid.org/0000-0002-6925-7889, diederik@palaeoclimate.science) * COMMENT: rmcd
+	AGE [ka BP] (Age) * GEOCODE * PI: Liebrand, Diederik (https://orcid.org/0000-0002-6925-7889, diederik@palaeoclimate.science) * COMMENT: tuned
+License:	Creative Commons Attribution 3.0 Unported (CC-BY-3.0) (URI: https://creativecommons.org/licenses/by/3.0/)
+Size:	115 data points
+*/
+Depth comp r [rmcd]	Age [ka BP]
+206.95	17042
+207.37	17135
+207.87	17243
+208.39	17352
+208.67	17408
+209.15	17509
+210.29	17727
+210.61	17818
+212.07	18120
+212.77	18223
+212.99	18285
+214.20	18494
+214.62	18587
+215.04	18670
+215.76	18775
+216.52	18893
+217.61	19045
+218.93	19220
+219.71	19330
+220.41	19411
+222.89	19708
+223.81	19809
+224.49	19881
+225.53	19982
+226.49	20093
+227.45	20205
+229.14	20366
+230.08	20477
+230.82	20584
+231.24	20668
+231.60	20751
+232.42	20856
+233.17	20964
+234.09	21057
+234.39	21107
+235.31	21214
+236.05	21325
+236.89	21424
+237.49	21493
+239.69	21704
+240.44	21811
+241.07	21892
+241.75	21968
+242.83	22075
+243.99	22182
+245.01	22266
+246.11	22348
+247.15	22457
+248.23	22568
+249.24	22670
+250.15	22748
+251.07	22846
+252.25	22954
+253.14	23052
+253.94	23118
+255.88	23328
+257.60	23434
+258.66	23515
+259.52	23601
+260.44	23709
+261.30	23825
+262.26	23905
+264.10	24047
+265.26	24161
+266.90	24263
+267.44	24337
+268.22	24435
+269.58	24544
+270.54	24654
+272.52	24823
+273.22	24935
+274.02	25042
+275.10	25214
+275.96	25321
+276.76	25430
+277.48	25523
+278.22	25599
+279.08	25702
+280.22	25815
+280.84	25893
+281.30	25954
+282.30	26046
+283.30	26156
+284.24	26260
+284.79	26343
+285.73	26436
+286.56	26541
+287.40	26647
+288.22	26805
+289.00	26912
+289.66	27020
+290.44	27114
+291.66	27298
+292.71	27407
+293.52	27511
+293.98	27590
+294.90	27685
+295.76	27791
+297.33	27962
+297.99	28058
+299.01	28167
+299.87	28272
+301.17	28449
+303.85	28727
+304.41	28792
+305.43	28891
+307.57	29097
+308.87	29172
+309.91	29274
+311.43	29385
+312.37	29495
+313.79	29668
+315.85	29890
+316.33	29957
+317.45	30052

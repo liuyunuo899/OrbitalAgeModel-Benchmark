@@ -1,0 +1,62 @@
+{
+  "experiment": "F, La2004 astronomical forcing sensitivity",
+  "source_file": "INSOLN.LA2004.BTL.ASC",
+  "source_sha256": "3f13b9f8e69085baf40bc67a2669e6f6af4148fef9218ed2158772aa91e35f8c",
+  "source_rows": 51001,
+  "window_ma_before_present": [
+    42.0,
+    2.0
+  ],
+  "source_spacing_kyr": 1.0,
+  "working_interpolation_step_kyr": 0.5,
+  "depth_length_m": 600.0,
+  "depth_step_m": 0.1,
+  "true_sr_m_per_myr": 15.0,
+  "cases": [
+    "ideal_four_sines",
+    "la2004_ecc_dominant",
+    "la2004_balanced"
+  ],
+  "weights": {
+    "la2004_ecc_dominant": [
+      6.0,
+      2.5,
+      1.5
+    ],
+    "la2004_balanced": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "common_clean_rms": 5.5,
+  "noise_ratio": 0.5,
+  "AR1_rho": 0.7,
+  "seeds": [
+    2001,
+    3001,
+    4001,
+    5001,
+    6001,
+    7001,
+    8001,
+    9001,
+    10001,
+    11001
+  ],
+  "scan_grid_m_per_myr": [
+    5,
+    30,
+    0.25
+  ],
+  "stage1_gate": 0.5,
+  "tuner_file": "F:\\\u5218\u96e8\u8bfa\\\u8bba\u6587\u6295\u7a3f\\\u975e\u7ebf\u6027\u6c89\u79ef\u901f\u7387emd-astro\\codes\\astro_py_tuner.py",
+  "limitations": [
+    "La2004 orbital parameters, not measured sediments",
+    "Normalized component weights are assumptions",
+    "Only fixed 42\u20132 Ma window and constant sedimentation rate",
+    "No hiatus or instrument response",
+    "Forced anchoring is diagnostic when gates reject",
+    "Interpolation of 1-kyr source data does not increase resolution"
+  ]
+}

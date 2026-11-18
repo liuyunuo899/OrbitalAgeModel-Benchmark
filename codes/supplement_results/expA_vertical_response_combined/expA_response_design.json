@@ -1,0 +1,36 @@
+{
+  "input": "original exp_common.synth_series, mid noise only",
+  "same_seeds": true,
+  "noise_ratio": 0.5,
+  "original_noise_is_pre_response": true,
+  "post_response_noise_added": false,
+  "sr_grid": [
+    2,
+    3,
+    5,
+    7.5,
+    10,
+    15,
+    20,
+    30,
+    40,
+    50
+  ],
+  "fwhm_m": [
+    0.0,
+    0.3,
+    0.5
+  ],
+  "fine_depth_grid_m": 0.01,
+  "original_depth_grid_m": 0.1,
+  "gaussian_boundary": "reflect",
+  "mtm_scoring": "original band_significances with true time axis",
+  "target_periods_kyr": [
+    405.0,
+    95.0,
+    40.0,
+    21.0
+  ],
+  "interpretation": "illustrative sensitivity, not a calibrated instrument threshold",
+  "archive_verified": true
+}

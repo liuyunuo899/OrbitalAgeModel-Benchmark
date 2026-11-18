@@ -1,0 +1,17 @@
+# Local environments, bytecode, IDE artifacts
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.spyproject/
+.spyderproject/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Do NOT ignore *.csv, *.npz, *.xlsx, *.png or *.pdf: archived results and figures are intentional.
