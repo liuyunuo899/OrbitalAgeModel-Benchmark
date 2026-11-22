@@ -1,0 +1,17 @@
+Supplementary sampling validation -- deterministic diagnostic
+Original source: F:\刘雨诺\论文投稿\非线性沉积速率emd-astro\AstroTuner-405kyr.zip (internal: AstroTuner-405kyr/code/expA_detection.csv)
+Original detection rows audited: 120
+Nyquist/detection disagreement rows: 6
+Unique disagreeing period-SR cells: 2
+Disagreeing cells: 95 kyr at 2 m/Myr; 40 kyr at 5 m/Myr
+95-kyr true wavelength: 0.190 m
+95-kyr predicted alias period: 105.555556 kyr
+95-kyr sample/alias identity max absolute residual: 1.89e-14
+40-kyr Nyquist wavelength: 0.200 m
+40-kyr sampled RMS at phase 0 deg: 1.93286e-14
+40-kyr sampled RMS at phase 90 deg: 1
+
+IMPORTANT: These demonstrations are noiseless, single-component and do not
+recompute Experiment A detections or establish new detection success rates.
+They do not simulate real instrument calibration or effective vertical resolution.
+Nyquist boundary equality is a theoretical limit, not robust cycle recovery.

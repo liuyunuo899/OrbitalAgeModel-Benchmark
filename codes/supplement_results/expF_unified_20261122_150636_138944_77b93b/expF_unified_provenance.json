@@ -1,0 +1,142 @@
+{
+  "experiment": "Experiment F unified, one click, original 30 + full ZB 40",
+  "run_mode": "full",
+  "n_runs": 70,
+  "source_La2004": "F:\\刘雨诺\\论文投稿\\非线性沉积速率emd-astro\\codes\\astronomical_data\\INSOLN.LA2004.BTL.ASC",
+  "sha256_La2004": "3f13b9f8e69085baf40bc67a2669e6f6af4148fef9218ed2158772aa91e35f8c",
+  "source_ZB": {
+    "ZB18a": {
+      "path": "F:\\刘雨诺\\论文投稿\\非线性沉积速率emd-astro\\codes\\astronomical_data\\PT-ZB18a_1-1.dat",
+      "sha256": "4599d148229007783175eacd9bae346f663079c4cc29e3f034bf4fda81e4d790",
+      "data_checks": {
+        "filename": "PT-ZB18a_1-1.dat",
+        "sha256": "4599d148229007783175eacd9bae346f663079c4cc29e3f034bf4fda81e4d790",
+        "source_rows": 746679,
+        "source_time_first_kyr": 0.0,
+        "source_time_last_kyr": -300000.0,
+        "selected_raw_rows_with_padding": 100438,
+        "median_raw_spacing_kyr_within_window": 0.39744387653991,
+        "source_columns": [
+          "time_kyr",
+          "eccentricity",
+          "obliquity_radians",
+          "precession_radians",
+          "perihelion_longitude_radians",
+          "climatic_precession_e_sin_perihelion"
+        ],
+        "climatic_precession_consistency_max_abs": 4.730486835580194e-13,
+        "working_1kyr_rows": 40001,
+        "working_time_old_to_young_myr": [
+          0.0,
+          40.0
+        ]
+      }
+    },
+    "ZB20a": {
+      "path": "F:\\刘雨诺\\论文投稿\\非线性沉积速率emd-astro\\codes\\astronomical_data\\PT-ZB20a_1-1.dat",
+      "sha256": "677e0c14b265321aada88f785b3c03184d245a1ee77862d0221103d9ed32274d",
+      "data_checks": {
+        "filename": "PT-ZB20a_1-1.dat",
+        "sha256": "677e0c14b265321aada88f785b3c03184d245a1ee77862d0221103d9ed32274d",
+        "source_rows": 751671,
+        "source_time_first_kyr": 0.0,
+        "source_time_last_kyr": -300000.0,
+        "selected_raw_rows_with_padding": 100438,
+        "median_raw_spacing_kyr_within_window": 0.3974581315778778,
+        "source_columns": [
+          "time_kyr",
+          "eccentricity",
+          "obliquity_radians",
+          "precession_radians",
+          "perihelion_longitude_radians",
+          "climatic_precession_e_sin_perihelion"
+        ],
+        "climatic_precession_consistency_max_abs": 4.805817202524487e-13,
+        "working_1kyr_rows": 40001,
+        "working_time_old_to_young_myr": [
+          0.0,
+          40.0
+        ]
+      }
+    }
+  },
+  "implementation_source_sha256": {
+    "original_expF": "4be330ee52b46ba647d1f7ade382b7b948a1d5719a43e7e3003b24120ee939d5",
+    "ZB_full": "dc2fbac961fe25e640384b177997dc37bd8cc0432e2588b587e76079367e8648",
+    "integrated_plot": "d04a57b8b8e1ef6f30cd4cbda98831b0e612ce8956aae5da46493f76b6766bd6"
+  },
+  "algorithm_source": "F:\\刘雨诺\\论文投稿\\非线性沉积速率emd-astro\\codes\\astro_py_tuner.py",
+  "seeds": [
+    2001,
+    3001,
+    4001,
+    5001,
+    6001,
+    7001,
+    8001,
+    9001,
+    10001,
+    11001
+  ],
+  "cases": [
+    "ideal_four_sines",
+    "la2004_ecc_dominant",
+    "la2004_balanced",
+    "ZB18a_ecc_dominant",
+    "ZB18a_balanced",
+    "ZB20a_ecc_dominant",
+    "ZB20a_balanced"
+  ],
+  "weights_la": {
+    "la2004_ecc_dominant": [
+      6.0,
+      2.5,
+      1.5
+    ],
+    "la2004_balanced": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "weights_zb": {
+    "ecc_dominant": [
+      6.0,
+      2.5,
+      1.5
+    ],
+    "balanced": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "window_ma_before_present": [
+    42.0,
+    2.0
+  ],
+  "true_sr_m_per_myr": 15.0,
+  "depth_step_m": 0.1,
+  "noise_ratio": 0.5,
+  "noise_rho": 0.7,
+  "SR_scan_grid": [
+    5.0,
+    30.0,
+    0.25
+  ],
+  "La2004_and_ZB_series": "ZB solutions use their own e, obliquity, climatic precession",
+  "ZB_component_stats": {
+    "ZB18a": {
+      "eccentricity_std": 0.013114925201407187,
+      "obliquity_std_rad": 0.00878243578756472,
+      "climatic_precession_std": 0.021519590302142805
+    },
+    "ZB20a": {
+      "eccentricity_std": 0.01311430439152467,
+      "obliquity_std_rad": 0.008783135086460753,
+      "climatic_precession_std": 0.02151928573251275
+    }
+  },
+  "diagnostic_note": "Forced anchors reported even if accepted gates reject the run; no results dropped.",
+  "original_input_scripts_modified": false
+}

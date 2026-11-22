@@ -1,0 +1,78 @@
+{
+  "experiment": "E, combined paired integer/non-integer hiatus sensitivity",
+  "values": {
+    "length_m": 600.0,
+    "dz_m": 0.1,
+    "sr_m_per_myr": 15.0,
+    "hiatus_depth_m": 300.0,
+    "hiatus_myr": [
+      0.0,
+      0.2,
+      0.405,
+      0.6,
+      0.81,
+      1.0,
+      1.62
+    ],
+    "integer_cycle_hiatus": [
+      0.405,
+      0.81,
+      1.62
+    ],
+    "noninteger_cycle_hiatus": [
+      0.2,
+      0.6,
+      1.0
+    ],
+    "seeds": [
+      2001,
+      3001,
+      4001,
+      5001,
+      6001,
+      7001,
+      8001,
+      9001,
+      10001,
+      11001
+    ],
+    "periods_kyr": [
+      405.0,
+      95.0,
+      40.0,
+      21.0
+    ],
+    "amplitudes": [
+      6.0,
+      4.0,
+      2.5,
+      1.5
+    ],
+    "noise_ratio": 0.5,
+    "AR1_rho": 0.7,
+    "fine_dt_myr": 0.0005,
+    "sr_scan_min": 5.0,
+    "sr_scan_max": 30.0,
+    "sr_scan_step": 0.25,
+    "imf_max": 10,
+    "stage1_gate": 0.5,
+    "tuner_seed": 42
+  },
+  "tuner_source": "F:\\\u5218\u96e8\u8bfa\\\u8bba\u6587\u6295\u7a3f\\\u975e\u7ebf\u6027\u6c89\u79ef\u901f\u7387emd-astro\\codes\\astro_py_tuner.py",
+  "limitations": [
+    "Only one central nondeposition hiatus; no erosion",
+    "Four ideal sinusoids rather than real astronomical solution",
+    "Seed-paired noise is identical in time, but not identical to Experiment B data",
+    "No instrument response",
+    "Forced anchoring is diagnostic even when gates fail",
+    "Hiatus known for scoring only; not an input to AstroTuner"
+  ],
+  "outputs": [
+    "expE_hiatus_combined_all70.csv",
+    "expE_hiatus_combined_summary.csv",
+    "expE_hiatus_combined_by_group.csv",
+    "expE_hiatus_combined_series.npz",
+    "expE_hiatus_combined_errors.txt",
+    "expE_hiatus_2x2_comparison.png"
+  ]
+}
