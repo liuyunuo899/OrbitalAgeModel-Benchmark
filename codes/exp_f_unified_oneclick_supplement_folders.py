@@ -26,7 +26,7 @@ La2004, PT-ZB and integrated plotting functions. No fitting or cherry-picking.
 from __future__ import annotations
 
 # EDIT HERE ONLY IF YOU NEED A DATA-ONLY CHECK:
-RUN_MODE = 'full'   # 'full' or 'check'; default is full 70 evaluations
+RUN_MODE = 'plot'   # 'plot': redraw existing result only; 'full': 70 runs; 'check': inputs only
 
 from pathlib import Path
 from datetime import datetime
@@ -1122,7 +1122,7 @@ def make_figure(fine, carriers, combined, summary, outdir, original):
     handles, labels = a.get_legend_handles_labels()
     legend_map = dict(zip(labels, handles))
     a.legend([legend_map[x] for x in SOLUTIONS], SOLUTIONS,
-             loc='upper center',bbox_to_anchor=(.5,-.18),ncol=3,frameon=False,fontsize=11)
+             loc='upper center',bbox_to_anchor=(.5,-.18),ncol=3,frameon=False)
     b.axvline(405,color='#717c88',lw=.85,ls=':')
     b.text(410,0.06,'405 kyr',fontsize=9,color='#596777')
     b.set(title='(b) Power spectra  |  balanced weights',
@@ -1167,14 +1167,14 @@ def make_figure(fine, carriers, combined, summary, outdir, original):
         d.text(mid,ylimd-.18,sol,ha='center',va='top',color=PALETTE[sol],fontweight='bold')
     c.legend(handles=[Patch(fc='#8A9CAC',alpha=.30,ec='#7C8998',label='Stage 1'),
                       Patch(fc='#718599',label='Both gates')],
-             loc='upper center',bbox_to_anchor=(.5,-.20),frameon=False,ncol=2,fontsize=11)
+             loc='upper center',bbox_to_anchor=(.5,-.20),frameon=False,ncol=2)
     d.legend(handles=[Line2D([],[],marker='o',ls='none',markerfacecolor='#67849C',
                               markeredgecolor='none',label='Individual forced anchors'),
                       Line2D([],[],marker='o',ls='none',markerfacecolor='#67849C',
                               markeredgecolor='white',markersize=9,label='Median forced anchor'),
                       Line2D([],[],marker='D',ls='none',markerfacecolor='#AC8C41',
                               markeredgecolor='white',markersize=7,label='Median constant SR')],
-             loc='upper center',bbox_to_anchor=(.5,-.20),frameon=False,ncol=3,fontsize=10)
+             loc='upper center',bbox_to_anchor=(.5,-.20),frameon=False,ncol=3,fontsize=8)
     fig.subplots_adjust(left=.065,right=.985,top=.88,bottom=.205,wspace=.23,hspace=.48)
     fig.text(.065,.044,
              'All RMSE points come directly from original per-seed CSV files; no manually entered values.',
@@ -1258,8 +1258,10 @@ def _summary_all70(combined):
 
 
 def main():
+    if RUN_MODE == 'plot':
+        return plot_archived_results()
     if RUN_MODE not in ('full', 'check'):
-        raise ValueError('RUN_MODE must be full or check')
+        raise ValueError('RUN_MODE must be plot, full or check')
     original = _load_embedded('_expf_embedded_original', ORIGINAL_SOURCE)
     zb = _load_embedded('_expf_embedded_zb', ZB_SOURCE)
     plotting = _load_embedded('_expf_embedded_integrated_plot', PLOT_SOURCE)
@@ -1386,6 +1388,275 @@ def main():
     print('Results folder:', out, flush=True)
     print('Figures folder:', figout, flush=True)
 
+
+
+def setup():
+    plt.rcParams.update({
+        'font.family':'DejaVu Sans','font.size':12.5,
+        'axes.titlesize':15.0,'axes.labelsize':14.0,
+        'xtick.labelsize':14.0,'ytick.labelsize':14.0,
+        'axes.spines.top':False,'axes.spines.right':False,
+        'figure.facecolor':'white','savefig.facecolor':'white',
+        'axes.edgecolor':'#53606B','axes.linewidth':0.85,
+        'legend.fontsize':14.0,'pdf.fonttype':42,'ps.fonttype':42
+    })
+
+# The result statistics are those recorded in Experiment F, not values transcribed from a concept image.
+PLOT_COLORS = {'La2004':'#4C80AC','ZB18a':'#30937C','ZB20a':'#D78955'}
+PLOT_DARK = {'La2004':'#285C94','ZB18a':'#0E755C','ZB20a':'#BF6636'}
+PALE = {'La2004':'#D9E8F5','ZB18a':'#D9EDE5','ZB20a':'#F6E6DC'}
+BAND = [(19,26,'Precession\n19–26 kyr','#F7E7DD'),
+        (37,45,'Obliquity\n~41 kyr','#E7EFF7'),
+        (90,115,'Short ecc.\n~100 kyr','#E7F1EB'),
+        (397,413,'405-kyr ecc.','#EFE9F6')]
+
+
+def style_ax(ax, horizontal=True):
+    ax.set_axisbelow(True)
+    if horizontal:
+        ax.grid(axis='y',color='#E7EBEF',linewidth=.7)
+    ax.tick_params(axis='both',which='major',length=3.2,width=.7,color='#64727B',labelsize=14.0)
+
+
+def panel_heading(fig, ax, panel, title):
+    pos = ax.get_position()
+    fig.text(pos.x0,pos.y1+.042, panel, va='center',fontsize=13.6,
+             fontweight='bold', color='#2F5D7F',
+             bbox={'facecolor':'#E8F1F7','edgecolor':'none','boxstyle':'round,pad=.31'})
+    fig.text(pos.x0+.054,pos.y1+.042,title,va='center',fontsize=15.0,
+             fontweight='bold',color='#29343F')
+
+
+def draw_wave(ax, fine,signals):
+    ii=(fine>=10)&(fine<=11)
+    # Draw the similar ZB20a trace first, then La2004, and ZB18a on top.
+    # No data transformation: display order/style only.
+    display_order = ('ZB20a', 'La2004', 'ZB18a')
+    for sol in display_order:
+        style = {
+            'La2004': dict(lw=1.20, ls='-', alpha=.95, zorder=3),
+            'ZB18a': dict(lw=1.75, ls=(0, (5.0, 2.5)), alpha=1.0, zorder=5),
+            'ZB20a': dict(lw=1.10, ls='-', alpha=.82, zorder=2),
+        }[sol]
+        ax.plot(fine[ii], signals[(sol, 'balanced')][ii],
+                color=PLOT_COLORS[sol], label=sol, **style)
+    ax.set_xlim(10,11)
+    ax.set_xlabel('Time since 42 Ma (Myr)',labelpad=6)
+    ax.set_ylabel('Normalized proxy (a.u.)',labelpad=8)
+    handles, labels = ax.get_legend_handles_labels()
+    by_name = dict(zip(labels, handles))
+    ax.legend([by_name[s] for s in SOLUTIONS], list(SOLUTIONS),
+              loc='upper right',bbox_to_anchor=(1,.99),ncol=3,
+              frameon=False,fontsize=14.0,handlelength=3.2,columnspacing=1.5)
+    style_ax(ax)
+
+
+def draw_power(ax,signals,orig):
+    # IMPORTANT: this is the original Experiment F Hann-window periodogram,
+    # NOT MTM. Do not call it MTM or draw unsupported significance thresholds.
+    for lo,hi,label,fc in BAND:
+        ax.axvspan(lo,hi,color=fc,alpha=.85,zorder=0)
+    for sol in ('ZB20a', 'La2004', 'ZB18a'):
+        periods,power=orig.get_spectral_periods(signals[(sol,'balanced')],orig.DT_MYR)
+        k=np.argsort(periods)
+        style = {
+            'La2004': dict(lw=0.96, ls='-', alpha=.93, zorder=3),
+            'ZB18a': dict(lw=1.40, ls=(0, (4.5, 2.5)), alpha=1.0, zorder=5),
+            'ZB20a': dict(lw=0.90, ls='-', alpha=.75, zorder=2),
+        }[sol]
+        ax.plot(periods[k],np.clip(power[k],1e-11,None),
+                color=PLOT_COLORS[sol], label=sol, **style)
+    ax.axvline(405,color='#9D87B5',ls=':',lw=1.05)
+    ax.set(xscale='log',yscale='log',xlim=(16,480),ylim=(1e-10,40),
+           xlabel='Period (kyr)',ylabel='Power (a.u.)')
+    ax.set_xticks([20,41,100,200,405],['20','41','100','200','405'])
+    handles, labels = ax.get_legend_handles_labels()
+    by_name = dict(zip(labels, handles))
+    ax.legend([by_name[s] for s in SOLUTIONS], list(SOLUTIONS),
+              loc='upper center',bbox_to_anchor=(0.5,-0.20),frameon=False,ncol=3,fontsize=14.0,
+              handlelength=2.0,columnspacing=1.0)
+    style_ax(ax)
+    # Only mark bands, not invented precise peak locations.
+    # The corresponding band names are described in the caption/README.
+
+
+def draw_accept(ax,vals):
+    ix=np.arange(6,dtype=float)
+    for i,(sol,mode) in enumerate([(s,m) for s in SOLUTIONS for m in MODES]):
+        val=vals[(sol,mode)]
+        ax.bar(i-.16,val['stage1'],.32,facecolor=PALE[sol],
+               edgecolor=PLOT_COLORS[sol],lw=.75,zorder=2)
+        ax.bar(i+.16,val['both'],.32,facecolor=PLOT_DARK[sol],zorder=3)
+        ax.text(i+.16,val['both']+.19,str(val['both']),
+                ha='center',va='bottom',color=PLOT_DARK[sol],fontsize=12.3,fontweight='bold')
+    for j,sol in enumerate(SOLUTIONS):
+        ax.text(2*j+.5,10.92,sol,ha='center',va='bottom',fontsize=12.0,
+                fontweight='bold',color=PLOT_DARK[sol],
+                bbox=dict(facecolor=PALE[sol],edgecolor='none',boxstyle='round,pad=.28'))
+    for j in [1.5,3.5]:ax.axvline(j,color='#D9E1E7',lw=1.)
+    ax.set_xlim(-.6,5.6); ax.set_ylim(0,11.75)
+    ax.set_ylabel('Accepted runs / 10',labelpad=8)
+    ax.set_xticks(ix,['Ecc.','Bal.']*3)
+    style_ax(ax)
+
+
+def draw_rmse(ax,vals,indiv):
+    ix=np.arange(6,dtype=float)
+    for i,(sol,mode) in enumerate([(s,m) for s in SOLUTIONS for m in MODES]):
+        val=vals[(sol,mode)]
+        if (sol,mode) in indiv:
+            rs=np.asarray(indiv[(sol,mode)],float)
+            jitter=np.random.default_rng(170+i).uniform(-.095,.095,len(rs))
+            ax.scatter(i+jitter,rs,c=PLOT_COLORS[sol],alpha=.38,
+                       s=25,linewidth=0,zorder=3)
+        ax.scatter(i,val['forced'],c=PLOT_DARK[sol],s=83,edgecolor='white',lw=1.2,zorder=6)
+        ax.scatter(i-.13,val['const'],c='#B99B53',marker='D',s=55,
+                   edgecolor='white',lw=.8,zorder=6)
+    ymax=7.25
+    if indiv:ymax=max(ymax,max(np.max(x) for x in indiv.values())+.6)
+    ax.set_xlim(-.6,5.6);ax.set_ylim(-.1,ymax)
+    ax.set_ylabel('RMSE (Myr)',labelpad=8)
+    ax.set_xticks(ix,['Ecc.','Bal.']*3)
+    for j,sol in enumerate(SOLUTIONS):
+        ax.text(2*j+.5,ymax*.96,sol,ha='center',va='top',fontsize=12.0,
+                fontweight='bold',color=PLOT_DARK[sol],
+                bbox=dict(facecolor=PALE[sol],edgecolor='none',boxstyle='round,pad=.28'))
+    for j in [1.5,3.5]: ax.axvline(j,color='#D9E1E7',lw=1.)
+    style_ax(ax)
+
+
+def make_fig(fine,signals,vals,indiv,orig):
+    # Large-font publication version; no results or calculations changed.
+    # This specifically mimics the selected concept: full-width waveform
+    # above three lower panels, with pastel badges, slim lines, and airy spacing.
+    fig=plt.figure(figsize=(19.8,10.6),facecolor='white')
+    gs=fig.add_gridspec(2,3,height_ratios=[1.05,1.10],
+                        left=.065,right=.975,bottom=.195,top=.805,
+                        hspace=.70,wspace=.35)
+    a=fig.add_subplot(gs[0,:])
+    b=fig.add_subplot(gs[1,0]);c=fig.add_subplot(gs[1,1]);d=fig.add_subplot(gs[1,2])
+    fig.text(.035,.960,'Experiment F  |  From synthetic orbital proxies to age-model error',
+             fontsize=24.0,fontweight='bold',color='#263744',va='top')
+    fig.text(.036,.912,'La2004 · ZB18a · ZB20a    |    complete published astronomical solutions'
+             '    |    balanced proxy weights    |    10 paired seeds per case',
+             fontsize=12.6,color='#728397',va='top')
+    fig.add_artist(plt.Line2D([.036,.974],[.879,.879],color='#D7E4EC',lw=1.2,transform=fig.transFigure))
+    draw_wave(a,fine,signals)
+    draw_power(b,signals,orig)
+    draw_accept(c,vals)
+    draw_rmse(d,vals,indiv)
+    panel_heading(fig,a,'(a)','Direct comparison of complete astronomical solutions · balanced weights')
+    panel_heading(fig,b,'(b)','Orbital power spectra')
+    panel_heading(fig,c,'(c)','Algorithm acceptance')
+    panel_heading(fig,d,'(d)','Age-model RMSE')
+    # The legends are discrete and do not overprint either plot.
+    leg_accept=[Patch(fc='#D9E8F5',ec='#4C80AC',label='Stage 1'),
+                Patch(fc='#285C94',label='Both gates')]
+    fig.legend(handles=leg_accept,loc='lower center',bbox_to_anchor=(.555,.115),
+               frameon=False,ncol=2,fontsize=14.0,columnspacing=1.4)
+    leg_rmse=[]
+    if indiv:
+        leg_rmse.append(Line2D([],[],marker='o',ls='none',mfc='#A8C6D9',mec='none',ms=7,label='Individual forced'))
+    leg_rmse += [Line2D([],[],marker='o',ls='none',mfc='#285C94',mec='white',ms=9,label='Median (forced)'),
+                 Line2D([],[],marker='D',ls='none',mfc='#B99B53',mec='white',ms=8,label='Median (constant SR)')]
+    fig.legend(handles=leg_rmse,loc='lower center',bbox_to_anchor=(.805,.115),
+               frameon=False,ncol=3 if indiv else 2,fontsize=14.0,handletextpad=.45,columnspacing=.7)
+    note='Forced anchoring was computed diagnostically, including rejected trials. '
+    if indiv:
+        note+='Small dots show archived per-seed RMSE; circles show medians.'
+    else:
+        note+='Per-seed RMSE CSV absent: only verified medians are displayed.'
+    fig.text(.036,.050,note,fontsize=11.0,color='#687A89')
+    return fig
+
+
+
+# ============================================================================
+# Publication figure-only mode: self-contained. Does NOT import this file
+# by filename, thereby avoiding circular imports and overwritten source errors.
+# The original 70-run implementation above is retained for RUN_MODE='full'.
+# ============================================================================
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
+
+SOLUTIONS = ('La2004','ZB18a','ZB20a')
+MODES = ('ecc_dominant','balanced')
+PLOT_CASES = {
+    'la2004_ecc_dominant':('La2004','ecc_dominant'),
+    'la2004_balanced':('La2004','balanced'),
+    'ZB18a_ecc_dominant':('ZB18a','ecc_dominant'),
+    'ZB18a_balanced':('ZB18a','balanced'),
+    'ZB20a_ecc_dominant':('ZB20a','ecc_dominant'),
+    'ZB20a_balanced':('ZB20a','balanced')
+}
+
+def plot_archived_results():
+    setup()
+    original = _load_embedded('_expf_plot_original', ORIGINAL_SOURCE)
+    zb = _load_embedded('_expf_plot_zb', ZB_SOURCE)
+    original.BASE = BASE
+    zb.BASE = BASE
+    zb.DATA = BASE/'astronomical_data'
+    la_path=BASE/'astronomical_data'/'INSOLN.LA2004.BTL.ASC'
+    if not la_path.is_file():
+        raise FileNotFoundError('Missing '+str(la_path))
+    t,e,obl,pbar,_ = original.read_la2004(la_path)
+    fine, laclean, _ = original.make_clean_inputs(t,e,obl,pbar)
+    sources={sol:zb.read_zb(sol) for sol in zb.SOLUTIONS}
+    zb_fine, zbclean, _ = zb.construct_carriers(original,sources)
+    if not np.array_equal(fine,zb_fine):
+        raise ValueError('Original and ZB time grids differ')
+    signals={(sol,mode): (laclean[f'la2004_{mode}'] if sol=='La2004'
+                           else zbclean[f'{sol}_{mode}'])
+             for sol in SOLUTIONS for mode in MODES}
+    summaries=list((BASE/'supplement_results').rglob('expF_unified_summary70.csv'))
+    if not summaries:
+        raise FileNotFoundError('Cannot find expF_unified_summary70.csv in supplement_results')
+    summary_path=max(summaries,key=lambda p:p.stat().st_mtime)
+    table=pd.read_csv(summary_path)
+    if len(table)!=7: raise ValueError('Expected 7 official experimental configurations')
+    vals={}
+    for _,r in table.iterrows():
+        case=str(r['case'])
+        if case not in PLOT_CASES: continue
+        vals[PLOT_CASES[case]]=dict(
+            stage1=int(r['stage1_pass']),
+            both=int(r['both_gates_pass']),
+            const=float(r['median_const_rmse_myr']),
+            forced=float(r['median_forced_rmse_myr']))
+    if set(vals)!=set(signals):
+        raise ValueError('Incomplete summary cases: '+repr(set(signals)-set(vals)))
+    indiv={}
+    all70=summary_path.with_name('expF_unified_all70.csv')
+    if all70.exists():
+        df=pd.read_csv(all70)
+        if len(df)!=70 or not {'case','seed','forced_anchor_rmse_myr'}.issubset(df.columns):
+            raise ValueError('Invalid 70-trial CSV: '+str(all70))
+        for case,key in PLOT_CASES.items():
+            sub=df[df['case']==case].sort_values('seed')
+            if len(sub)!=10:
+                raise ValueError(f'Expected 10 seed results for {case}')
+            points=sub['forced_anchor_rmse_myr'].to_numpy(float)
+            if not np.isclose(float(np.median(points)),vals[key]['forced'],rtol=1e-5):
+                raise ValueError('RMSE median mismatch for '+case)
+            indiv[key]=points
+
+    out=FIGURE_ROOT/'expF_same_positions_larger_fonts'
+    out.mkdir(parents=True,exist_ok=True)
+    fig=make_fig(fine,signals,vals,indiv,original)
+    png=out/'ExperimentF_same_positions_larger_fonts.png'
+    pdf=out/'ExperimentF_same_positions_larger_fonts.pdf'
+    fig.savefig(png,dpi=260,facecolor='white')
+    fig.savefig(pdf,facecolor='white')
+    plt.close(fig)
+    print('Mode: plot; original 70 experiments not re-run')
+    print('Summary:',summary_path)
+    print('Individual points:', '10 per each of six groups' if indiv else 'not found; medians only')
+    print('Output PNG:',png)
+    print('Output PDF:',pdf)
 
 if __name__ == '__main__':
     main()
